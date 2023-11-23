@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Matemática</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #options {
+            display: flex;
+            justify-content: center;
+        }
+        .option {
+            font-size: 18px;
+            padding: 10px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        #nextBtn {
+            font-size: 16px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Jogo de Matemática - Fase 1</h1>
+    <div id="question"></div>
+    <div id="options"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Próxima Pergunta</button>
+    <div id="result"></div>
+
+    <script>
+        var currentPhase = 1;
+        var correctAnswer;
+        
+        function generateQuestion() {
+            var num1 = Math.floor(Math.random() * 10);
+            var num2 = Math.floor(Math.random() * 10);
+            correctAnswer = num1 + num2;
+
+            document.getElementById("question").textContent = `Qual é a resposta para ${num1} + ${num2}?`;
+
+            var options = document.getElementById("options");
+            options.innerHTML = "";
+
+            for (var i = 0; i < 4; i++) {
+                var option = document.createElement("div");
+                option.className = "option";
+                option.textContent = correctAnswer - Math.floor(Math.random() * 5); // Randomize options
+                option.onclick = function() {
+                    checkAnswer(this.textContent);
+                };
+                options.appendChild(option);
+            }
+
+            // Place the correct answer among the options
+            var correctOption = document.createElement("div");
+            correctOption.className = "option";
+            correctOption.textContent = correctAnswer;
+            correctOption.onclick = function() {
+                checkAnswer(this.textContent);
+            };
+            options.appendChild(correctOption);
+        }
+
+        function checkAnswer(userAnswer) {
+            var resultElement = document.getElementById("result");
+
+            if (parseInt(userAnswer) === correctAnswer) {
+                resultElement.textContent = "Resposta correta!";
+            } else {
+                resultElement.textContent = "Resposta incorreta. Tente novamente.";
+            }
+        }
+
+        function nextQuestion() {
+            var resultElement = document.getElementById("result");
+            resultElement.textContent = "";
+
+            if (currentPhase < 3) {
+                currentPhase++;
+                document.getElementById("question").textContent = `Jogo de Matemática - Fase ${currentPhase}`;
+                generateQuestion();
+            } else {
+                document.getElementById("question").textContent = "Parabéns! Você completou todas as fases.";
+                document.getElementById("options").innerHTML = "";
+                document.getElementById("nextBtn").style.display = "none";
+            }
+        }
+
+        // Start the game with the first question
+        generateQuestion();
+    </script>
+</body>
+</html>
